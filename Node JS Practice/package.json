@@ -12,5 +12,8 @@
   "type": "commonjs",
   "devDependencies": {
     "nodemon": "^3.1.11"
+  },
+  "bin": {
+    "hello": "./hello-cli/hello.js"
   }
 }
