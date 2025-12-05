@@ -9,10 +9,12 @@ const TodoApp = () => {
     }
 
     const handleAdd = () => {
-        const trimmed = input.trim();
-        if (!trimmed) return;
+        const newTodoId = Date.now()
+        const trimmedInput = input.trim();
+
+        if (!trimmedInput) return;
         setTodos(prevTodos => {
-            return [...prevTodos, input]
+            return [...prevTodos, { id: newTodoId, val: input }];
         })
     }
 
@@ -20,6 +22,10 @@ const TodoApp = () => {
         if (e.key == "Enter") {
             return handleAdd(e)
         }
+    }
+
+    const handleDelete = () => {
+
     }
     return (
         <div style={{ maxWidth: "400px", margin: "24px auto", fontFamily: "sans-sarif" }}>
@@ -38,8 +44,13 @@ const TodoApp = () => {
                 <ul>
                     {todos.length == 0 ?
                         <p style={{ color: "#777" }}>No Todos yet</p>
-                        : todos.map((todo, index) => {
-                            return <li style={{ color: "black" }} key={index}>{todo}</li>
+                        : todos.map((todo) => {
+                            return (
+                                <div style={{ display: "flex", gap: 6 }} key={todo.id}>
+                                    <li style={{ color: "black" }}>{todo}</li>
+                                    <button onClick={() => handleDelete(todo.id)}>Delete</button>
+                                </div>
+                            )
                         })}
                 </ul>
             </div>
