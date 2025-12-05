@@ -45,11 +45,11 @@ const util = require("util");
 // B) Sync
 // fs.appendFileSync("output.txt", "\nHeyIamAppended2\n");
 
-// Deleting files
+// Deleting files (unlink will permanentely without recycle bin)
 // A) Async
 // fs.unlink("output.txt", (err) => {
 //   if (err) return console.error(err);
 // });
 
 // B) Sync
-fs.unlinkSync("output.txt");
+// fs.unlinkSync("output.txt");
