@@ -4,13 +4,12 @@ const fs = require("fs");
 
 const command = process.argv[2] || "No command";
 const note = process.argv[3] || "Empty Note";
-const filePath = "./notes.json";
+const filePath = "./core2/notes-cli/notes.json";
 
 const loadNotes = (filePath) => {
   try {
     if (!fs.existsSync(filePath)) return [];
     const data = fs.readFileSync(filePath, "utf8");
-    console.log("Data retrived Success!");
     return JSON.parse(data);
   } catch (err) {
     console.error(err.message);
@@ -20,7 +19,6 @@ const loadNotes = (filePath) => {
 const saveNotes = (filePath, notes) => {
   try {
     fs.writeFileSync(filePath, JSON.stringify(notes, null, 2));
-    console.log("Note save success!");
   } catch (err) {
     console.error(err.message);
   }
@@ -28,18 +26,32 @@ const saveNotes = (filePath, notes) => {
 
 const addNotes = (filePath, note) => {
   const notes = loadNotes(filePath);
-  const updatedNotes = [...notes, { id: Date.now(), text: note }];
-  console.log("Note add Success!");
-  saveNotes(filePath, newNotes);
+  const newNoteId = Date.now();
+  const updatedNotes = [...notes, { id: newNoteId, text: note }];
+  saveNotes(filePath, updatedNotes);
+  console.log(`New Note added with id ${newNoteId}`);
 };
 
-// fs.readFile("./notes.json", "utf8", (err, data) => {
-//   if (err) return console.error(err);
-//   const notes = JSON.parse(data);
-//   console.log(`${notes[0]?.id}: ${notes[0]?.text}`);
-//   console.log(data);
-// });
+const listNotes = (filePath) => {
+  const notes = loadNotes(filePath);
+  notes.map((note) => {
+    console.log(`${note.id}: ${note.text}`);
+  });
+};
+
+const deleteNotes = (filePath, id) => {
+  const notes = loadNotes(filePath);
+  const deletedNote = notes?.filter((note) => note?.id == id);
+  if (deletedNote.length == 0) return console.log(`Note With ${id} not found!`);
+  const updatedNotes = notes?.filter((note) => note?.id != id);
+  saveNotes(filePath, updatedNotes);
+  console.log(`Note id: ${deletedNote[0]?.id} delete success!`);
+};
 
 if (command == "add") {
-  add(filePath, command, note);
+  addNotes(filePath, note);
+} else if (command == "list") {
+  listNotes(filePath);
+} else if (command == "delete") {
+  deleteNotes(filePath, Number(note));
 }
