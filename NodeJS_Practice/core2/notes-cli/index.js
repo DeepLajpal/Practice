@@ -2,8 +2,6 @@
 
 const fs = require("fs");
 
-const command = process.argv[2] || "No command";
-const note = process.argv[3] || "Empty Note";
 const filePath = "./core2/notes-cli/notes.json";
 
 const loadNotes = (filePath) => {
@@ -34,7 +32,7 @@ const addNotes = (filePath, note) => {
 
 const listNotes = (filePath) => {
   const notes = loadNotes(filePath);
-  notes.map((note) => {
+  notes.forEach((note) => {
     console.log(`${note.id}: ${note.text}`);
   });
 };
@@ -48,10 +46,13 @@ const deleteNotes = (filePath, id) => {
   console.log(`Note id: ${deletedNote[0]?.id} delete success!`);
 };
 
+const [, , command, ...args] = process.argv;
 if (command == "add") {
-  addNotes(filePath, note);
+  addNotes(filePath, args.join(" "));
 } else if (command == "list") {
   listNotes(filePath);
 } else if (command == "delete") {
-  deleteNotes(filePath, Number(note));
+  deleteNotes(filePath, Number(args[0]));
+} else {
+  console.log("Commands add | list | delete");
 }
