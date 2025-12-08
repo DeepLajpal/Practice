@@ -16,5 +16,8 @@
   "bin": {
     "hello": "./core1/hello-cli/hello.js",
     "notes": "./core2/notes-cli/index.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
   }
 }
