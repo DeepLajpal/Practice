@@ -1,8 +1,11 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 const TodoApp = () => {
     const [input, setInput] = useState("");
-    const [todos, setTodos] = useState([]);
+    const [todos, setTodos] = useState(() => {
+        const saved = localStorage.getItem("todos");
+        return saved ? JSON.parse(saved) : [];
+    });
 
     const handleInput = (e) => {
         setInput(e.target.value);
@@ -14,7 +17,7 @@ const TodoApp = () => {
 
         if (!trimmedInput) return;
         setTodos(prevTodos => {
-            return [...prevTodos, { id: newTodoId, val: input }];
+            return [...prevTodos, { id: newTodoId, val: trimmedInput }];
         })
     }
 
@@ -24,9 +27,31 @@ const TodoApp = () => {
         }
     }
 
-    const handleDelete = () => {
+    const handleDelete = (id) => {
+        const updatedTodos = todos.filter((todo) => todo?.id != id);
+        setTodos(updatedTodos);
+    }
+
+    const handleEdit = (id) => {
+        const newVal = prompt(`Please Enter new value for id: ${id}`);
+        console.log(`Hello ${newVal}`);
+        // const trimmedInput = input.trim();
+        // if (!trimmedInput) return;
+        // const newTodos = todos.map((todo) => {
+        //     if (todo.id == id) {
+        //         return { id: { id }, val: { newVal } }
+        //     }
+        //     return todo;
+        // })
+
+        // setTodos(newTodos);
 
     }
+
+    useEffect(() => {
+        localStorage.setItem("todos", JSON.stringify(todos));
+    }, [todos])
+
     return (
         <div style={{ maxWidth: "400px", margin: "24px auto", fontFamily: "sans-sarif" }}>
             <h1>Todo App</h1>
@@ -46,10 +71,11 @@ const TodoApp = () => {
                         <p style={{ color: "#777" }}>No Todos yet</p>
                         : todos.map((todo) => {
                             return (
-                                <div style={{ display: "flex", gap: 6 }} key={todo.id}>
-                                    <li style={{ color: "black" }}>{todo}</li>
-                                    <button onClick={() => handleDelete(todo.id)}>Delete</button>
-                                </div>
+                                <li style={{ display: "flex", gap: 6, color: "black" }} key={todo?.id}>
+                                    <span>{todo?.val}</span>
+                                    <button onClick={() => handleDelete(todo?.id)}>Delete</button>
+                                    <button onClick={() => handleEdit(todo?.id)}>Edit</button>
+                                </li>
                             )
                         })}
                 </ul>
