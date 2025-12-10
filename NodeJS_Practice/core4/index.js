@@ -1,6 +1,14 @@
 const express = require("express");
 
 const app = express();
+// 5) JSON body parsing
+app.use(express.json());
+
+app.get("/testJSON", (req, res) => {
+  console.log(req.body);
+  res.send("Hey Thanks for calling, I am testJSON");
+});
+
 // 4. Middleware
 app.use((req, res, next) => {
   console.log("1st Middleware");
@@ -14,6 +22,7 @@ app.get("/", (req, res) => {
   res.statusCode = 404;
   res.send("Page not found @deep");
 });
+
 app.get("/home", (req, res) => {
   res.send("Thank you for visiting /home route");
 });
