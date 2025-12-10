@@ -34,18 +34,18 @@ const TodoApp = () => {
 
     const handleEdit = (id) => {
         const newVal = prompt(`Please Enter new value for id: ${id}`);
-        console.log(`Hello ${newVal}`);
-        // const trimmedInput = input.trim();
-        // if (!trimmedInput) return;
-        // const newTodos = todos.map((todo) => {
-        //     if (todo.id == id) {
-        //         return { id: { id }, val: { newVal } }
-        //     }
-        //     return todo;
-        // })
+        const found = todos.find((todo) => {
+            return todo?.id == id
+        });
+        if (!found) return;
+        const newTodos = todos?.map((todo) => {
+            if (todo?.id == id) {
+                return { id: id, val: newVal }
+            }
+            return todo;
+        })
 
-        // setTodos(newTodos);
-
+        setTodos(newTodos);
     }
 
     useEffect(() => {
