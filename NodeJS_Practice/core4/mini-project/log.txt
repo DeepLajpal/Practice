@@ -1,0 +1,10 @@
+[DELETE] /products/1 at 17/12/2025, 10:09 pm
+[DELETE] /products/1 at 17/12/2025, 10:09 pm
+[POST] /products/1 at 17/12/2025, 10:09 pm
+[POST] /products/1 at 17/12/2025, 10:12 pm
+[GET] /products/1 at 17/12/2025, 10:12 pm
+[GET] /products/ at 17/12/2025, 10:12 pm
+[GET] /products/ at 17/12/2025, 10:12 pm
+[GET] /products/ at 17/12/2025, 10:12 pm
+[GET] /products/ at 17/12/2025, 10:12 pm
+[GET] /products/ at 17/12/2025, 10:13 pm
