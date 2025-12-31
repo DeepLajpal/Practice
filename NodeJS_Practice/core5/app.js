@@ -27,11 +27,15 @@ app.get("/tasks", async (req, res) => {
 app.post("/tasks", async (req, res) => {
   try {
     const { title } = req.body;
-    await pool.query("INSERT INTO tasks (title, completed) VALUES ($1, $2)", [
-      title,
-      false,
-    ]);
-    res.json({ ...resObj, message: "Task Inserted Succsss!" });
+    const result = await pool.query(
+      "INSERT INTO tasks (title, completed) VALUES ($1, $2) RETURNING *",
+      [title, false]
+    );
+    res.status(201).json({
+      ...resObj,
+      message: "Task Inserted Succsss!",
+      data: result.rows[0],
+    });
   } catch (error) {
     res
       .status(500)
