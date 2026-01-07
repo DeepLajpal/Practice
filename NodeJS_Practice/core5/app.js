@@ -7,7 +7,7 @@ const successResObj = {
   success: true,
   message: "Request Success!",
 };
-const errObjRes = {
+const errorResObj = {
   success: false,
   message: "Request Failed! Please try again Later.",
 };
@@ -20,13 +20,26 @@ app.get("/tasks", async (req, res) => {
 
     res.json({ ...successResObj, data: result.rows });
   } catch (error) {
-    res.status(500).json(errObjRes);
+    res.status(500).json(errorResObj);
     console.log(error.message);
   }
 });
 app.post("/tasks", async (req, res) => {
   try {
+    let isTitleExistInBody = false;
+    for (const prop in req.body) {
+      if (prop == "title") {
+        isTitleExistInBody = true;
+      }
+    }
+    if (!isTitleExistInBody) {
+      res.status(400).json({
+        ...errorResObj,
+        message: "Task Not Received, Please provide a valid input!",
+      });
+    }
     const { title } = req.body;
+
     // using parameterized queries for protection against SQL injection type attacks
     const result = await pool.query(
       "INSERT INTO tasks (title, completed) VALUES ($1, $2) RETURNING *",
@@ -38,7 +51,7 @@ app.post("/tasks", async (req, res) => {
       data: result.rows[0],
     });
   } catch (error) {
-    res.status(500).json(errObjRes);
+    res.status(500).json(errorResObj);
     console.log("Error: ", error.message);
   }
 });
@@ -53,11 +66,11 @@ app.put("/tasks/:id", async (req, res) => {
       [id, title, completed]
     );
     if (result.rows.length == 0) {
-      return res.status(404).send({ ...errObjRes, message: "id not found" });
+      return res.status(404).send({ ...errorResObj, message: "id not found" });
     }
     res.status(201).send({ ...successResObj, data: result.rows });
   } catch (error) {
-    res.status(500).send(errObjRes);
+    res.status(500).send(errorResObj);
     console.log("Error: ", error.message);
   }
 });
