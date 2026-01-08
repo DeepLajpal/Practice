@@ -2,10 +2,12 @@ import pool from "../db/pool.js";
 const successResObj = {
   success: true,
   message: "Request Success!",
+  data: [],
 };
 const errorResObj = {
   success: false,
   message: "Request Failed! Please try again Later.",
+  data: null,
 };
 const getTasks = async (req, res) => {
   try {
